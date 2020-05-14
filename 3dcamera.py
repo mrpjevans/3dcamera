@@ -4,10 +4,11 @@ from http.server import SimpleHTTPRequestHandler, HTTPServer
 from PIL import Image
 from io import BytesIO
 
-port = 8080
+port = 8081
 control_html = os.path.dirname(os.path.realpath(__file__)) + '/control.html'
-left_camera = "https://placekitten.com/320/240"
-right_camera = "https://placekitten.com/320/240"
+# Reverse the URLs to create cross-eye images instead of parallel
+left_camera = "http://leftcam.local:8080/?action=snapshot"
+right_camera = "http://rightcam.local:8080/?action=snapshot"
 
 
 def process_image():
@@ -28,7 +29,7 @@ def process_image():
 
     image_buffer = BytesIO()
     side_by_side_image.save(image_buffer, format='JPEG')
-    image_data = imagefile.getvalue()
+    image_data = image_buffer.getvalue()
 
     return image_data
 

@@ -4,6 +4,7 @@
     <link rel="stylesheet" href="static/bootstrap/css/bootstrap.min.css" />
     <script src="/static/jquery-3.5.1.min.js"></script>
     <script src="/static/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/static/script.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>3D Raspberry Pi Camera</title>
     <style>
@@ -11,11 +12,20 @@
         margin: 0;
         padding: 0;
       }
+      .stream {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 2px;
+      }
+      .stream img {
+        width: 90%;
+      }
     </style>
   </head>
   <body>
     <div class="container-fluid">
-      <nav class="navbar navbar-dark bg-primary">
+      <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
         <span class="navbar-brand mb-0 h1">3D Raspberry Pi Camera</span>
         <button
           class="navbar-toggler"
@@ -29,37 +39,113 @@
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-          <div class="navbar-nav">
-            <a class="nav-item nav-link active" href="#"
-              >Home <span class="sr-only">(current)</span></a
-            >
-            <a class="nav-item nav-link" href="#">Features</a>
-            <a class="nav-item nav-link" href="#">Pricing</a>
-            <a
-              class="nav-item nav-link disabled"
-              href="#"
-              tabindex="-1"
-              aria-disabled="true"
-              >Disabled</a
-            >
-          </div>
+          <ul class="navbar-nav mr-auto">
+            <li class="nav-item dropdown">
+              <a
+                class="nav-link dropdown-toggle"
+                href="#"
+                id="viewDropdown"
+                role="button"
+                data-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
+              >
+                View [Parallel]
+              </a>
+              <div
+                class="dropdown-menu"
+                aria-labelledby="viewDropdown"
+                id="viewMenu"
+              >
+                <a
+                  class="dropdown-item active"
+                  href="#"
+                  onclick="switchView(true, this)"
+                  >Parallel</a
+                >
+                <a
+                  class="dropdown-item"
+                  href="#"
+                  onclick="switchView(false, this)"
+                  >Cross</a
+                >
+              </div>
+            </li>
+            <li class="nav-item dropdown">
+              <a
+                class="nav-link dropdown-toggle"
+                href="#"
+                id="fileDropdown"
+                role="button"
+                data-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
+              >
+                File
+              </a>
+              <div
+                class="dropdown-menu"
+                aria-labelledby="viewDropdown"
+                id="fileMenu"
+              >
+                <a
+                  class="dropdown-item active"
+                  href="#"
+                  onclick="switchFile('parallel', this)"
+                  >Parallel</a
+                >
+                <a
+                  class="dropdown-item"
+                  href="#"
+                  onclick="switchFile('cross', this)"
+                  >Cross-View</a
+                >
+                <a
+                  class="dropdown-item"
+                  href="#"
+                  onclick="switchFile('triple', this)"
+                  >Triple (LRL)</a
+                >
+                <a
+                  class="dropdown-item"
+                  href="#"
+                  onclick="switchFile('triple_reverse', this)"
+                  >Triple (RLR)</a
+                >
+                <a
+                  class="dropdown-item"
+                  href="#"
+                  onclick="switchFile('anaglyph', this)"
+                  >Anaglyph</a
+                >
+              </div>
+            </li>
+          </ul>
         </div>
       </nav>
-      <div class="row">
-        <div class="col-sm">
-          <img src="http://leftcam.local:8080/?action=stream" class="stream" />
+      <div class="row stream-container">
+        <div class="col-sm stream">
+          <img src="" class="stream" id="left" />
         </div>
-        <div class="col-sm">
-          <img src="http://rightcam.local:8080/?action=stream" class="stream" />
+        <div class="col-sm stream">
+          <img src="" class="stream" id="right" />
         </div>
       </div>
       <div class="row">
         <div class="col-sm">
-          <button type="button" class="btn btn-primary btn-block">
-            Take Photo
-          </button>
+          <form method="post" action="/">
+            <input type="hidden" name="type" value="parallel" />
+            <button type="submit" class="btn btn-primary btn-block">
+              Take Photo
+            </button>
+          </form>
         </div>
       </div>
     </div>
+    <script>
+      $(function () {
+        switchView(true, "#viewMenu a:first");
+      });
+    </script>
   </body>
 </html>

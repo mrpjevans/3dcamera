@@ -5,14 +5,18 @@ from flask import render_template
 import urllib.request
 from PIL import Image
 from io import BytesIO
+from datetime import datetime
+import os
 
 app = Flask(__name__)
 
 # Update these if using different names!
 left_camera = "http://leftcam.local:8080/?action=snapshot"
 right_camera = "http://rightcam.local:8080/?action=snapshot"
+my_dir = os.path.dirname(os.path.realpath(__file__))
+save_to = my_dir + "/photos"
 
-# Following code based on https://github.com/miguelgrinberg/anaglyph.py/blob/master/anaglyph.py
+# Following function based on https://github.com/miguelgrinberg/anaglyph.py/blob/master/anaglyph.py
 # Copyright (c) 2013 by Miguel Grinberg
 
 
@@ -86,6 +90,11 @@ def process_image(image_type):
     image_buffer = BytesIO()
     side_by_side_image.save(image_buffer, format='JPEG')
     image_data = image_buffer.getvalue()
+
+    datetime_now = datetime.now()
+    timestamp_str = datetime_now.strftime("%Y%M%d%H%M%S")
+    side_by_side_image.save(
+        save_to + '/' + timestamp_str + '.jpg', format='JPEG')
 
     return image_data
 

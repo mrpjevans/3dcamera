@@ -6,6 +6,7 @@ To set up the advanced server:
 
 ```bash
 pip3 install flask pillow
+sudo apt install libopenjp2-7 libtiff5
 ```
 
 To run the advanced server:
